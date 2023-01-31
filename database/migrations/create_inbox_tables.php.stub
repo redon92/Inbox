@@ -1,0 +1,47 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateInboxTables extends Migration {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up() {
+        Schema::create('threads', function (Blueprint $table) {
+            $table->id();
+            $table->morphs('creator');
+            $table->string('subject');
+            $table->timestamps();
+        });
+
+        Schema::create('messages', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedInteger('thread_id');
+            $table->morphs('author');
+            $table->text('body');
+            $table->timestamps();
+        });
+
+        Schema::create('participants', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedInteger('thread_id');
+            $table->morphs('participant');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down() {
+        Schema::dropIfExists('threads');
+        Schema::dropIfExists('messages');
+        Schema::dropIfExists('participants');
+    }
+}
