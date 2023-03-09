@@ -1,5 +1,5 @@
 {
-    "name": "92redon/inbox",
+    "name": "redon92/inbox",
     "description": "A laravel package to create messages and threads",
     "type": "library",
     "license": "MIT",
@@ -13,7 +13,7 @@
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
-            "redon92\\Inbox\\": "src/"
+            "redon92\\inbox\\": "src/"
         }
     },
     "require": {
@@ -24,10 +24,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "redon92\\Inbox\\InboxServiceProvider"
+                "redon92\\inbox\\Providers\\InboxServiceProvider"
             ],
             "aliases": {
-                "Thread": "redon92\\Inbox\\Facades\\Thread"
+                "Thread": "redon92\\inbox\\Facades\\Thread"
             }
         }
     }

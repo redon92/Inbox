@@ -2,11 +2,15 @@
 
 namespace redon92\Inbox;
 
-class Calculator {
+class Thread {
     private $result;
 
     public function __construct() {
         $this->result = 0;
+    }
+
+    public function create(array $items){
+        dd($items);
     }
 
     public function addMessage(int $user) {

@@ -28,15 +28,10 @@ final class InboxServiceProvider extends ServiceProvider
      {
          //
          if ($this->app->runningInConsole()) {
-               // publish config file
-               // register artisan command
+             // publish config file
+             // register artisan command
 
-               if (! class_exists('CreateInboxTables')) {
-                 $this->publishes([
-                   __DIR__ . '/../database/migrations/create_inbox_tables.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . 'create_inbox_tables.php'),
-                   // you can add any number of migrations here
-                 ], 'migrations');
-               }
-             }
+             $this->loadMigrationsFrom(__DIR__ . '/../migrations');
+         }
      }
 }
