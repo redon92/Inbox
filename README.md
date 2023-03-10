@@ -4,29 +4,29 @@
 In order to run the package, you need to add to composer.json:
 
 under require:
-
+```
 "redon92/inbox" : "dev-main"
-
+```
 
 and repositories need to be inside like:
-
+```
 "repositories": [
     {
         "url": "https://github.com/redon92/Inbox",
         "type": "git"
     }
 ],
-
+```
 
 In order to publish the migrations, you need to run:
-
+```
 php artisan vendor:publish --tag=inbox
-
+```
 
 You can run the migrations with:
-
+```
 php artisan migrate
-
+```
 
 After that you can use the methods of the models and also ThreadServices methods in your controller methods, such as for example:
 
