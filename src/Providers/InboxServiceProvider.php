@@ -14,9 +14,9 @@ final class InboxServiceProvider extends ServiceProvider
      public function register()
      {
          //
-         $this->app->bind('thread', function ($app) {
-             return new Thread();
-         });
+//         $this->app->bind('thread', function ($app) {
+//             return new Thread();
+//         });
      }
 
      /**
@@ -31,7 +31,11 @@ final class InboxServiceProvider extends ServiceProvider
              // publish config file
              // register artisan command
 
-             $this->loadMigrationsFrom(__DIR__ . '/../migrations');
+             $this->publishes([
+                 __DIR__ . '\../../database/migrations/create_threads_table.php' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_threads_table.php'),
+                 __DIR__ . '\../../database/migrations/create_messages_table.php' => database_path('migrations/' . date('Y_m_d_His', time()+1*60) . '_create_messages_table.php'),
+                 __DIR__ . '\../../database/migrations/create_participants_table.php' => database_path('migrations/' . date('Y_m_d_His', time()+2*60) . '_create_participants_table.php'),
+             ], ['migrations', 'inbox']);
          }
      }
 }

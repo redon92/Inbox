@@ -3,7 +3,8 @@
 namespace redon92\Inbox\App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use redon92\Inbox\App\Models\Participant;
+use redon92\inbox\App\Models\Participant;
+use redon92\inbox\App\Models\Message;
 
 class Thread extends Model
 {
@@ -37,7 +38,8 @@ class Thread extends Model
         return $this->morphToMany('App\Models\User', 'participant', 'participants')->withTimestamps();
     }
 
-    public function getLatestMessage(){
+    public function getLatestMessage(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    {
         return $this->messages()->orderByDesc('id');
     }
 
@@ -55,10 +57,9 @@ class Thread extends Model
 
     public function scopeForModelWithNewMessages($query, $user)
     {
-        return $query->whereHas('participants', function ($query) use ($user) {
+        return $query->with('messages')->whereHas('participants', function ($query) use ($user) {
             $query->where('participant_id', $user->id)
-                ->where('participant_type', get_class($user))
-                ->where('latest_read_message', '<', $this->getLatestMessage()->first()->id);
+                ->where('participant_type', get_class($user));
         });
     }
 }

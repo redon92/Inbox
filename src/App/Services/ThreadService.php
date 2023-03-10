@@ -2,12 +2,13 @@
 
 namespace redon92\Inbox\App\Services;
 
-use redon92\Inbox\App\Models\Thread;
+use redon92\inbox\App\Contracts\ThreadServiceContract;
+use redon92\inbox\App\Models\Thread;
 use Illuminate\Support\Arr;
 
-class ThreadService
+class ThreadService implements ThreadServiceContract
 {
-    public function addMessage(Thread $thread, array $messageData, $creator)
+    public function addMessage(Thread $thread, array $messageData, $creator): void
     {
         $messageData = Arr::add($messageData, 'author_type', get_class($creator));
         $messageData = Arr::add($messageData, 'author_id', $creator->id);
@@ -15,14 +16,14 @@ class ThreadService
         $thread->messages()->create($messageData);
     }
 
-    public function addMessages(Thread $thread, array $messagesData, $creator)
+    public function addMessages(Thread $thread, array $messagesData, $creator): void
     {
         foreach ($messagesData as $messageData) {
             $this->addMessage($thread, $messageData, $creator);
         }
     }
 
-    public function addParticipant(Thread $thread, $participant)
+    public function addParticipant(Thread $thread, $participant): void
     {
         $thread->participants()->create([
             'participant_type' => get_class($participant),
@@ -30,14 +31,14 @@ class ThreadService
         ]);
     }
 
-    public function addParticipants(Thread $thread, array $participants)
+    public function addParticipants(Thread $thread, array $participants):void
     {
         foreach ($participants as $participant) {
             $this->addParticipant($thread, $participant);
         }
     }
 
-    public function markAsRead(Thread $thread, $participant)
+    public function markAsRead(Thread $thread, $participant):void
     {
         if($this->hasParticipant($thread, $participant)){
             $latestMessage = $thread->messages()->orderByDesc('id')->get()->first();
@@ -46,12 +47,12 @@ class ThreadService
         }
     }
 
-    public function getLatestMessage(Thread $thread)
+    public function getLatestMessage(Thread $thread): mixed
     {
-        return $thread->latestMessage;
+        return $thread->getLatestMessage()->get()->first();
     }
 
-    public function hasParticipant(Thread $thread, $participant)
+    public function hasParticipant(Thread $thread, $participant): bool
     {
         if ($participant->thread_id === $thread->id){
             return true;
@@ -59,7 +60,7 @@ class ThreadService
         return false;
     }
 
-    public function isUnread(Thread $thread, $user)
+    public function isUnread(Thread $thread, $user): bool
     {
         $latestMessage = $thread->getLatestMessage()->first();
 
